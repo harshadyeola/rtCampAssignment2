@@ -224,7 +224,7 @@ wordpress_install () {
 
 
 	
-	mysql -u root -p$DB_ROOT -e "create database if not exists $DOMAIN_NAME$DB_XT; GRANT ALL PRIVILEGES ON $DOMAIN_NAME$DB_XT.* TO 'admin'@'localhost' IDENTIFIED BY 'password'" >> $LOG 2>&1
+	mysql -u root -p$DB_ROOT -e "create database if not exists \`$DOMAIN_NAME$DB_XT\`; GRANT ALL PRIVILEGES ON \`$DOMAIN_NAME$DB_XT\`.* TO 'admin'@'localhost' IDENTIFIED BY 'password'" >> $LOG 2>&1
 
 	if [ $? != 0 ];then
 		echo "ERROR: Failed to Create Database, Please check logfile $LOG" 1>&2
