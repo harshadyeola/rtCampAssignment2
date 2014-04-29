@@ -212,7 +212,7 @@ wordpress_install () {
 	fi
 	echo "Extracting WORDPRESS files...."
 	tar --strip-components=1 -xvf latest.tar.gz
-	if [ $? !=0 ]; then
+	if [ $? != 0 ]; then
 		echo "ERROR: extraction failed.plz check log file $LOG" 1>&2
 		exit 1
 	fi
