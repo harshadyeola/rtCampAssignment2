@@ -255,13 +255,15 @@ wordpress_install () {
 
 	if [ $? != 0 ]; then
 		apt-get -y install curl >> $LOG 2>&1
+	else
+		echo "failed to install curl........please check $LOG" >> $LOG 1>&2
 		exit 1
 	fi
         #issue 4 Fixed
 	SALT=$( curl -s -L https://api.wordpress.org/secret-key/1.1/salt/ )
 	STR='put your unique phrase here'
 	printf '%s\n' "g/$STR/d" a "$SALT" . w | ed -s /var/www/$DOMAIN_NAME/htdocs/wp-config.php
-	service nginx restart
+	
 	
 	
 }
@@ -276,8 +278,7 @@ set_permissions () {
 	# issue 3 fixed
 	chmod -R 700 /var/www/$DOMAIN_NAME/htdocs/ 2>&1
 	
-	service nginx restart
-	service php5-fpm restart
+
 	
 }
 	
@@ -289,6 +290,7 @@ configure_domain
 nginx_configure
 wordpress_install
 set_permissions
+service nginx restart
 	echo ""
 	echo ""
 	echo "Click to open http://$DOMAIN_NAME in your faviourate browser to access your WordPress Site."
