@@ -255,9 +255,13 @@ wordpress_install () {
 
 	if [ $? != 0 ]; then
 		apt-get -y install curl >> $LOG 2>&1
+		if [ $? != 0 ]; then
+			echo "failed to install curl .....plz check $LOG" >> $LOG 1>&2
+			exit 1
+		fi
 	else
-		echo "failed to install curl........please check $LOG" >> $LOG 1>&2
-		exit 1
+		echo "curl already installed" >> $LOG 1>&2
+		
 	fi
         #issue 4 Fixed
 	SALT=$( curl -s -L https://api.wordpress.org/secret-key/1.1/salt/ )
@@ -296,25 +300,3 @@ service nginx restart
 	echo "Click to open http://$DOMAIN_NAME in your faviourate browser to access your WordPress Site."
 	echo "..................!!!!!!!!************INSATALLATION COMPLETED**********!!!!!!!!!!..................... "
 exit 0;
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-	
- 
-
-
-
- 
