@@ -43,7 +43,7 @@ check_distro () {
 #log file creation
 create_log () {
 	
-	#Fix issue 3 
+	#issue 3 Fixed
 	touch $LOG
 	chmod 644 $LOG
 	clear
@@ -110,9 +110,20 @@ package_install () {
 
 	dpkg-query -s  php5 >> $LOG 2>&1
 	if [ $? != 0 ]; then
-		apt-get -y install php5 php5-mysql php5-cgi >> $LOG 2>&1
+		apt-get -y install php5 php5-cgi >> $LOG 2>&1
 		if [ $? != 0 ]; then
 			echo "ERROR : error occured while installing php...plz check log file $LOG" 1>&2
+			exit 1
+		fi
+	else
+		echo "found php5 already installed...."
+	fi
+	
+	dpkg-query -s  php5-mysql >> $LOG 2>&1
+	if [ $? != 0 ]; then
+		apt-get -y install php5-mysql >> $LOG 2>&1
+		if [ $? != 0 ]; then
+			echo "ERROR : error occured while installing php-mysql...plz check log file $LOG" 1>&2
 			exit 1
 		fi
 	else
@@ -183,6 +194,10 @@ nginx_configure () {
 		echo "Error occured while creating link plz check $LOG"1>&2
 		exit 1
 	fi
+	#ISSUE 2 FIXED
+	wanttochange="listen = /var/run/php5-fpm.sock"
+	sed -i "/listen = 127.0.0.1:9000/c \\$wanttochange " /etc/php5/fpm/pool.d/www.conf
+	sed -i "/extension=msql.so/ s/^;//" /etc/php5/fpm/php.ini
 	
 	nginx -t >> $LOG 2>&1
 	service nginx reload >> $LOG 2>&1
@@ -242,7 +257,7 @@ wordpress_install () {
 		apt-get -y install curl >> $LOG 2>&1
 		exit 1
 	fi
-#Fix issue 4
+        #issue 4 Fixed
 	SALT=$( curl -s -L https://api.wordpress.org/secret-key/1.1/salt/ )
 	STR='put your unique phrase here'
 	printf '%s\n' "g/$STR/d" a "$SALT" . w | ed -s /var/www/$DOMAIN_NAME/htdocs/wp-config.php
@@ -256,8 +271,12 @@ set_permissions () {
 		echo "ERROR: Failed to Ownership of www-data:www-data /var/www/$DOMAIN_NAME, Please check logfile $LOG" 1>&2
 		exit 1
 	fi
-	#Fix issue 3
-	chmod -R 700 /var/www 2>&1
+	# issue 3 fixed
+	chmod -R 700 /var/www/$DOMAIN_NAME/htdocs/ 2>&1
+	
+	service nginx restart
+	service php5-fpm restart
+	
 }
 	
 echo ".......*****************STARTING WEB SERVER AND WORDPRESS INSTALLER*******************........."
