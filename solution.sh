@@ -43,8 +43,8 @@ check_distro () {
 #log file creation
 create_log () {
 	
+	#Fix issue 3 
 	touch $LOG
-	chmod 777 $LOG
 	clear
 }
 
@@ -255,7 +255,8 @@ set_permissions () {
 		echo "ERROR: Failed to Ownership of www-data:www-data /var/www/$DOMAIN_NAME, Please check logfile $LOG" 1>&2
 		exit 1
 	fi
-	chmod -R 755 /var/www 2>&1
+	#Fix issue 3
+	chmod -R 754 /var/www 2>&1
 }
 	
 echo ".......*****************STARTING WEB SERVER AND WORDPRESS INSTALLER*******************........."
