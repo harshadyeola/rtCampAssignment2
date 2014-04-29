@@ -244,7 +244,7 @@ wordpress_install () {
 
 	SALT=$( curl -s -L https://api.wordpress.org/secret-key/1.1/salt/ )
 	STR='put your unique phrase here'
-	printf '%s\n' "g/$STR/d" a "$SALT" . w | ed -s /var/www/$DOMAIN_NAME/wp-config.php
+	printf '%s\n' "g/$STR/d" a "$SALT" . w | ed -s /var/www/$DOMAIN_NAME/htdocs/wp-config.php
 	
 }
 
