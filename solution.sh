@@ -45,6 +45,7 @@ create_log () {
 	
 	#Fix issue 3 
 	touch $LOG
+	chmod 644 $LOG
 	clear
 }
 
