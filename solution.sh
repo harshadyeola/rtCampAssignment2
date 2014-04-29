@@ -241,7 +241,7 @@ wordpress_install () {
 		apt-get -y install curl >> $LOG 2>&1
 		exit 1
 	fi
-
+#Fix issue 4
 	SALT=$( curl -s -L https://api.wordpress.org/secret-key/1.1/salt/ )
 	STR='put your unique phrase here'
 	printf '%s\n' "g/$STR/d" a "$SALT" . w | ed -s /var/www/$DOMAIN_NAME/htdocs/wp-config.php
