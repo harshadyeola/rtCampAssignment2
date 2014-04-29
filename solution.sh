@@ -257,7 +257,7 @@ set_permissions () {
 		exit 1
 	fi
 	#Fix issue 3
-	chmod -R 754 /var/www 2>&1
+	chmod -R 700 /var/www 2>&1
 }
 	
 echo ".......*****************STARTING WEB SERVER AND WORDPRESS INSTALLER*******************........."
